@@ -1,0 +1,218 @@
+{
+  "schema": "spawn.external-work-lifecycle-vectors.v1",
+  "origin": "https://spawn.example.com",
+  "vectors": [
+    {
+      "name": "usdc-15000-accepted",
+      "request": {
+        "event": {
+          "event_id": "sha256:1579269977e771fcb2c00132327eb92a9d74aae6a0e1b23a5e652bd4294edf7a",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:628a28204091b669bc05f180db98edc86668a3e02f0c675926bb1806ef3bf09d",
+          "evidence_hash": "sha256:289225aa2089c5b714b8f2e7d3f4465b67990c1597ded4d83728cffd0dbb4ce7",
+          "sequence": 1,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "Independent Studio 9",
+            "stage": "accepted",
+            "currency": "USDC",
+            "quoted_amount_micro_units": "15000"
+          }
+        },
+        "expires_at_ms": 1800000000000
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:1579269977e771fcb2c00132327eb92a9d74aae6a0e1b23a5e652bd4294edf7a\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:628a28204091b669bc05f180db98edc86668a3e02f0c675926bb1806ef3bf09d\",\"evidence_hash\":\"sha256:289225aa2089c5b714b8f2e7d3f4465b67990c1597ded4d83728cffd0dbb4ce7\",\"sequence\":1,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"Independent Studio 9\",\"stage\":\"accepted\",\"currency\":\"USDC\",\"quoted_amount_micro_units\":\"15000\"}},\"expires_at_ms\":1800000000000}",
+      "request_hash": "e0a57c3574ad58b0d7f1007fa91f74f3bf91d491e85ceb08f5c82cfad6cc851f",
+      "text": "SPAWN | External Backroom Independent Studio 9\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: accepted. Budget quote 0.015 USDC."
+    },
+    {
+      "name": "usdc-15000-settled",
+      "request": {
+        "event": {
+          "event_id": "sha256:456b69f5baf24c1c35908060d62a07713f3590dc546f8090d4b0b9ff547b27d3",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:628a28204091b669bc05f180db98edc86668a3e02f0c675926bb1806ef3bf09d",
+          "evidence_hash": "sha256:a43f0c8ccff2d0a41664c90d35d307979cd7cd041eb9f52fb598660cba706bf9",
+          "sequence": 3,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "Independent Studio 9",
+            "stage": "settled",
+            "currency": "USDC",
+            "quoted_amount_micro_units": "15000",
+            "public_delivery_url": "https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+          }
+        },
+        "expires_at_ms": 1800000000000,
+        "parent": {
+          "event_id": "sha256:1579269977e771fcb2c00132327eb92a9d74aae6a0e1b23a5e652bd4294edf7a",
+          "request_hash": "e0a57c3574ad58b0d7f1007fa91f74f3bf91d491e85ceb08f5c82cfad6cc851f"
+        }
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:456b69f5baf24c1c35908060d62a07713f3590dc546f8090d4b0b9ff547b27d3\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:628a28204091b669bc05f180db98edc86668a3e02f0c675926bb1806ef3bf09d\",\"evidence_hash\":\"sha256:a43f0c8ccff2d0a41664c90d35d307979cd7cd041eb9f52fb598660cba706bf9\",\"sequence\":3,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"Independent Studio 9\",\"stage\":\"settled\",\"currency\":\"USDC\",\"quoted_amount_micro_units\":\"15000\",\"public_delivery_url\":\"https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd\"}},\"expires_at_ms\":1800000000000,\"parent\":{\"event_id\":\"sha256:1579269977e771fcb2c00132327eb92a9d74aae6a0e1b23a5e652bd4294edf7a\",\"request_hash\":\"e0a57c3574ad58b0d7f1007fa91f74f3bf91d491e85ceb08f5c82cfad6cc851f\"}}",
+      "request_hash": "307b012171f87748b6edac36d49986da74c9720094dada7c54ed699e22d8025a",
+      "text": "SPAWN | External Backroom Independent Studio 9\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: completed. Settlement recorded. Budget quote 0.015 USDC.\nPublic delivery: https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+    },
+    {
+      "name": "test_usd-15000-accepted",
+      "request": {
+        "event": {
+          "event_id": "sha256:5e6b1d60d3a81479c907a716b78e192e43cc824ca50f80d7c3c4f200d80612f2",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:5302629598e26c01a31d367825f8f796797652ad0620f4e6dcf0f5b50b894785",
+          "evidence_hash": "sha256:e9701c8dd7d3d01765586a206a4f9fe4c5793eb8fc547a7cb84001a6f75d3213",
+          "sequence": 1,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "Another-Bot_29",
+            "stage": "accepted",
+            "currency": "TEST_USD",
+            "quoted_amount_micro_units": "15000"
+          }
+        },
+        "expires_at_ms": 1800000000000
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:5e6b1d60d3a81479c907a716b78e192e43cc824ca50f80d7c3c4f200d80612f2\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:5302629598e26c01a31d367825f8f796797652ad0620f4e6dcf0f5b50b894785\",\"evidence_hash\":\"sha256:e9701c8dd7d3d01765586a206a4f9fe4c5793eb8fc547a7cb84001a6f75d3213\",\"sequence\":1,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"Another-Bot_29\",\"stage\":\"accepted\",\"currency\":\"TEST_USD\",\"quoted_amount_micro_units\":\"15000\"}},\"expires_at_ms\":1800000000000}",
+      "request_hash": "79f0454ff530d347454689467086cce6b714b5f931b32a189aae6015b86e50af",
+      "text": "SPAWN | External Backroom Another-Bot_29\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: accepted. Budget quote 0.015 TEST_USD."
+    },
+    {
+      "name": "test_usd-15000-settled",
+      "request": {
+        "event": {
+          "event_id": "sha256:d13a44736e7d5b94a4daacb4d7788dfb7f6916151264a9d4b8899c1a0865cff4",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:5302629598e26c01a31d367825f8f796797652ad0620f4e6dcf0f5b50b894785",
+          "evidence_hash": "sha256:b08320e7f2a02ac7f6461dc5e9428e66c7145096b4e7a266c0986306e92a8422",
+          "sequence": 3,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "Another-Bot_29",
+            "stage": "settled",
+            "currency": "TEST_USD",
+            "quoted_amount_micro_units": "15000",
+            "public_delivery_url": "https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+          }
+        },
+        "expires_at_ms": 1800000000000,
+        "parent": {
+          "event_id": "sha256:5e6b1d60d3a81479c907a716b78e192e43cc824ca50f80d7c3c4f200d80612f2",
+          "request_hash": "79f0454ff530d347454689467086cce6b714b5f931b32a189aae6015b86e50af"
+        }
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:d13a44736e7d5b94a4daacb4d7788dfb7f6916151264a9d4b8899c1a0865cff4\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:5302629598e26c01a31d367825f8f796797652ad0620f4e6dcf0f5b50b894785\",\"evidence_hash\":\"sha256:b08320e7f2a02ac7f6461dc5e9428e66c7145096b4e7a266c0986306e92a8422\",\"sequence\":3,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"Another-Bot_29\",\"stage\":\"settled\",\"currency\":\"TEST_USD\",\"quoted_amount_micro_units\":\"15000\",\"public_delivery_url\":\"https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd\"}},\"expires_at_ms\":1800000000000,\"parent\":{\"event_id\":\"sha256:5e6b1d60d3a81479c907a716b78e192e43cc824ca50f80d7c3c4f200d80612f2\",\"request_hash\":\"79f0454ff530d347454689467086cce6b714b5f931b32a189aae6015b86e50af\"}}",
+      "request_hash": "31af492eaa10db3bb9ced06cd4a8293adceb4150be048e1adc1761f8a2de6ea1",
+      "text": "SPAWN | External Backroom Another-Bot_29\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: completed. Settlement recorded. Budget quote 0.015 TEST_USD.\nPublic delivery: https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+    },
+    {
+      "name": "usdc-1-accepted",
+      "request": {
+        "event": {
+          "event_id": "sha256:00f9f95d13a6b5bb5ecbe006d2d7e591ecde8be8eab7d209ff5a72ad7a3d11bc",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:81ddb9704f5d12571bb33a9a4a18826fe66886d183b587ea275b730e7c881ecc",
+          "evidence_hash": "sha256:52d98436f070a658991b1e590f327fa368bcc013dc756f82062199e38514566a",
+          "sequence": 1,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "X",
+            "stage": "accepted",
+            "currency": "USDC",
+            "quoted_amount_micro_units": "1"
+          }
+        },
+        "expires_at_ms": 1800000000000
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:00f9f95d13a6b5bb5ecbe006d2d7e591ecde8be8eab7d209ff5a72ad7a3d11bc\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:81ddb9704f5d12571bb33a9a4a18826fe66886d183b587ea275b730e7c881ecc\",\"evidence_hash\":\"sha256:52d98436f070a658991b1e590f327fa368bcc013dc756f82062199e38514566a\",\"sequence\":1,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"X\",\"stage\":\"accepted\",\"currency\":\"USDC\",\"quoted_amount_micro_units\":\"1\"}},\"expires_at_ms\":1800000000000}",
+      "request_hash": "f0c28f427cfb3507e0161c06a4840fc15f4b1cb89d60c6cb8456c95fcfe765e5",
+      "text": "SPAWN | External Backroom X\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: accepted. Budget quote 0.000001 USDC."
+    },
+    {
+      "name": "usdc-1-settled",
+      "request": {
+        "event": {
+          "event_id": "sha256:051926d3a02006ed9eb6dd2076623da2d1c18d0dcb36fedcd5dbeebe5864fb76",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:81ddb9704f5d12571bb33a9a4a18826fe66886d183b587ea275b730e7c881ecc",
+          "evidence_hash": "sha256:bdaeee64526fe1b3fb3a84297eb1b5cd506aad1128eb0a4f02980ce48fb88def",
+          "sequence": 3,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "X",
+            "stage": "settled",
+            "currency": "USDC",
+            "quoted_amount_micro_units": "1",
+            "public_delivery_url": "https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+          }
+        },
+        "expires_at_ms": 1800000000000,
+        "parent": {
+          "event_id": "sha256:00f9f95d13a6b5bb5ecbe006d2d7e591ecde8be8eab7d209ff5a72ad7a3d11bc",
+          "request_hash": "f0c28f427cfb3507e0161c06a4840fc15f4b1cb89d60c6cb8456c95fcfe765e5"
+        }
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:051926d3a02006ed9eb6dd2076623da2d1c18d0dcb36fedcd5dbeebe5864fb76\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:81ddb9704f5d12571bb33a9a4a18826fe66886d183b587ea275b730e7c881ecc\",\"evidence_hash\":\"sha256:bdaeee64526fe1b3fb3a84297eb1b5cd506aad1128eb0a4f02980ce48fb88def\",\"sequence\":3,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"X\",\"stage\":\"settled\",\"currency\":\"USDC\",\"quoted_amount_micro_units\":\"1\",\"public_delivery_url\":\"https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd\"}},\"expires_at_ms\":1800000000000,\"parent\":{\"event_id\":\"sha256:00f9f95d13a6b5bb5ecbe006d2d7e591ecde8be8eab7d209ff5a72ad7a3d11bc\",\"request_hash\":\"f0c28f427cfb3507e0161c06a4840fc15f4b1cb89d60c6cb8456c95fcfe765e5\"}}",
+      "request_hash": "28779895940923b4bbe8102909ce5d9292088d68556f5d86b926ca0164b76f9b",
+      "text": "SPAWN | External Backroom X\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: completed. Settlement recorded. Budget quote 0.000001 USDC.\nPublic delivery: https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+    },
+    {
+      "name": "test_usd-999999999999999999999999999999-accepted",
+      "request": {
+        "event": {
+          "event_id": "sha256:900e577fbe018e83e6ce34764ed09292c91de9295324b1b07e084fa460e41682",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:52046a6611e7059d3320cdc55ed45fe3a6a8d38c2b419ae3c41c6c1708818d94",
+          "evidence_hash": "sha256:d1fe48a5995fd98c2761a9b56a37aac5b1ec1f87c86fb5adaea76af0f74670fb",
+          "sequence": 1,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "stage": "accepted",
+            "currency": "TEST_USD",
+            "quoted_amount_micro_units": "999999999999999999999999999999"
+          }
+        },
+        "expires_at_ms": 1800000000000
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:900e577fbe018e83e6ce34764ed09292c91de9295324b1b07e084fa460e41682\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:52046a6611e7059d3320cdc55ed45fe3a6a8d38c2b419ae3c41c6c1708818d94\",\"evidence_hash\":\"sha256:d1fe48a5995fd98c2761a9b56a37aac5b1ec1f87c86fb5adaea76af0f74670fb\",\"sequence\":1,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"stage\":\"accepted\",\"currency\":\"TEST_USD\",\"quoted_amount_micro_units\":\"999999999999999999999999999999\"}},\"expires_at_ms\":1800000000000}",
+      "request_hash": "96b797d6636386aafdca7b8478b972153e4f0ebbc2f7a820280d8096a0703fa1",
+      "text": "SPAWN | External Backroom AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: accepted. Budget quote 999999999999999999999999.999999 TEST_USD."
+    },
+    {
+      "name": "test_usd-999999999999999999999999999999-settled",
+      "request": {
+        "event": {
+          "event_id": "sha256:1d193c6d7986e18ed30123bc9c418b77c0a7d3a0e38e50ae8aa4ec2b43d1596d",
+          "account_ref": "acct-x",
+          "consent_hash": "sha256:52046a6611e7059d3320cdc55ed45fe3a6a8d38c2b419ae3c41c6c1708818d94",
+          "evidence_hash": "sha256:173f6e53bd91dc612ff20b935dedbd9b7c28784e1658da6aeba4a5b9f6432448",
+          "sequence": 3,
+          "public": {
+            "schema": "spawn.external-work-lifecycle.v1",
+            "public_contract_ref": "contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "backroom": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "stage": "settled",
+            "currency": "TEST_USD",
+            "quoted_amount_micro_units": "999999999999999999999999999999",
+            "public_delivery_url": "https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+          }
+        },
+        "expires_at_ms": 1800000000000,
+        "parent": {
+          "event_id": "sha256:900e577fbe018e83e6ce34764ed09292c91de9295324b1b07e084fa460e41682",
+          "request_hash": "96b797d6636386aafdca7b8478b972153e4f0ebbc2f7a820280d8096a0703fa1"
+        }
+      },
+      "request_json": "{\"event\":{\"event_id\":\"sha256:1d193c6d7986e18ed30123bc9c418b77c0a7d3a0e38e50ae8aa4ec2b43d1596d\",\"account_ref\":\"acct-x\",\"consent_hash\":\"sha256:52046a6611e7059d3320cdc55ed45fe3a6a8d38c2b419ae3c41c6c1708818d94\",\"evidence_hash\":\"sha256:173f6e53bd91dc612ff20b935dedbd9b7c28784e1658da6aeba4a5b9f6432448\",\"sequence\":3,\"public\":{\"schema\":\"spawn.external-work-lifecycle.v1\",\"public_contract_ref\":\"contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"backroom\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"stage\":\"settled\",\"currency\":\"TEST_USD\",\"quoted_amount_micro_units\":\"999999999999999999999999999999\",\"public_delivery_url\":\"https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd\"}},\"expires_at_ms\":1800000000000,\"parent\":{\"event_id\":\"sha256:900e577fbe018e83e6ce34764ed09292c91de9295324b1b07e084fa460e41682\",\"request_hash\":\"96b797d6636386aafdca7b8478b972153e4f0ebbc2f7a820280d8096a0703fa1\"}}",
+      "request_hash": "105a53eb5b84a14369b705e7f0c1b94cbd01e9c74722c89838c6c2408ad5e626",
+      "text": "SPAWN | External Backroom AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nContract contract_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: completed. Settlement recorded. Budget quote 999999999999999999999999.999999 TEST_USD.\nPublic delivery: https://spawn.example.com/deliveries/delivery_dddddddddddddddddddddddddddddddd"
+    }
+  ]
+}

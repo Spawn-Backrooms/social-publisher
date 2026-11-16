@@ -1,0 +1,109 @@
+name: Test
+
+"on":
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:18.4-bookworm
+        env:
+          POSTGRES_DB: publisher_test
+          POSTGRES_USER: publisher
+          # Disposable CI service only; never use this value for deployment.
+          POSTGRES_PASSWORD: ci_only_ephemeral_database
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U publisher -d publisher_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.27.4"
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Verify dependencies
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Check reachable Go vulnerabilities
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...
+
+      - name: Unit and provider fixture tests with race detection
+        run: |
+          unset TEST_DATABASE_URL TEST_PGLITE
+          go test -race -count=1 ./...
+
+      - name: Native PostgreSQL integration and concurrency tests
+        env:
+          TEST_DATABASE_URL: postgres://publisher:ci_only_ephemeral_database@127.0.0.1:5432/publisher_test?sslmode=disable
+          VERIFY_OUTPUT_DIR: .artifacts/native-postgres
+        run: |
+          unset TEST_PGLITE
+          python3 -m unittest discover -s scripts/verify -p 'test_*.py'
+          python3 -m unittest discover -s docs -p 'test_verify_restore.py'
+          make test-postgres
+
+      - name: Native restore-manifest regression
+        env:
+          TEST_DATABASE_URL: postgres://publisher:ci_only_ephemeral_database@127.0.0.1:5432/publisher_test?sslmode=disable
+          GOFLAGS: ''
+          GOWORK: 'off'
+          GOENV: 'off'
+        run: |
+          unset TEST_PGLITE
+          go test -race -count=1 -run '^TestRestoreEventManifestCannotBeMaskedByNewQuarantineEvents$' -skip '^$' -json ./internal/ops > .artifacts/native-postgres/restore-manifest-tests.jsonl
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          events = [json.loads(line) for line in Path('.artifacts/native-postgres/restore-manifest-tests.jsonl').read_text().splitlines()]
+          package = 'socialpublisher/internal/ops'
+          name = 'TestRestoreEventManifestCannotBeMaskedByNewQuarantineEvents'
+          actions = [event['Action'] for event in events if event.get('Package') == package and event.get('Test') == name and event['Action'] != 'output']
+          assert actions == ['run', 'pass'], 'The restore-manifest regression must execute and pass exactly once'
+          assert not any(event['Action'] in ('skip', 'fail', 'build-fail') for event in events), 'Skipped or failed tests cannot pass this gate'
+          assert sum(event['Action'] == 'pass' and event.get('Package') == package and 'Test' not in event for event in events) == 1, 'The package must complete'
+          PY
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build static service binary
+        run: |
+          make build BUILD_REVISION="${GITHUB_SHA}"
+          ./bin/publisher version
+
+      - name: Verify the compiled executable against native PostgreSQL
+        env:
+          TEST_DATABASE_URL: postgres://publisher:ci_only_ephemeral_database@127.0.0.1:5432/publisher_test?sslmode=disable
+          VERIFY_OUTPUT_DIR: .artifacts/native-postgres
+        run: |
+          unset TEST_PGLITE
+          python3 scripts/verify/binary-smoke.py --binary bin/publisher --revision "${GITHUB_SHA}"
+
+      - name: Retain native verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-postgres-${{ github.sha }}
+          path: .artifacts/native-postgres
+          if-no-files-found: warn
+          retention-days: 14

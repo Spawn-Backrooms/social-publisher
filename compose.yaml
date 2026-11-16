@@ -1,0 +1,57 @@
+name: social-publisher
+
+x-publisher: &publisher
+  image: social-publisher:local
+  build:
+    context: .
+  env_file:
+    - .env
+  environment:
+    # Compose services use the database service name; native Go uses loopback.
+    DATABASE_URL: "postgres://publisher:${POSTGRES_PASSWORD:?Set a random POSTGRES_PASSWORD in .env}@postgres:5432/publisher?sslmode=disable"
+    PORT: "8080"
+  read_only: true
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:18-bookworm
+    environment:
+      POSTGRES_USER: publisher
+      POSTGRES_DB: publisher
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Set a random POSTGRES_PASSWORD in .env}"
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      # PostgreSQL 18 images keep versioned data beneath this directory.
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U publisher -d publisher"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+
+  migrate:
+    <<: *publisher
+    profiles: ["tools"]
+    command: ["migrate"]
+    restart: "no"
+
+  publisher:
+    <<: *publisher
+    command: ["serve"]
+    ports:
+      - "127.0.0.1:8080:8080"
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+volumes:
+  postgres_data:

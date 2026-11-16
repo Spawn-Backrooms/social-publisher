@@ -1,0 +1,17 @@
+.env
+bin/
+coverage.out
+*.log
+.superpowers/
+/publisher
+.artifacts/
+__pycache__/
+*.pyc
+/cloudflare/node_modules
+/evidence/go-native-client-fixture/
+/evidence/test-build/
+/evidence/worker-build/
+/evidence/foundation-release-tests/
+/evidence/native-operations.test.mjs
+/evidence/native-bridge.fixture.mjs
+/evidence/shared-origin-release.test.mjs
