@@ -152,3 +152,56 @@ The default-off [central SPAWN lifecycle service](docs/central-lifecycle.md) is 
 ## Contributing and license
 
 Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues privately: see [SECURITY.md](SECURITY.md). Licensed under [Apache-2.0](LICENSE). Copyright 2026 SPAWN.
+
+## Developer architecture
+
+The application JWT identifies a tenant and user; it does not authorize a caller to choose another owner or expose provider tokens. The publisher owns the durable delivery state. Each platform still controls which content, accounts, scopes, and visibility it accepts.
+
+```text
+Application backend + browser composer
+    | short-lived application-user JWT; browser-bound OAuth
+    v
+Publisher HTTP API (validate and admit one original post)
+    | one database transaction: post + targets + idempotency + events
+    v
+PostgreSQL (owner-scoped queue, leases, account locks, checkpoints)
+    | claim eligible work; resume known operations where possible
+    v
+Worker -> TikTok / X / Instagram adapters
+    | separate target outcome and receipt for each destination
+    v
+Application reads status and ordered events
+```
+
+| Change | Start here | Evidence to update |
+| --- | --- | --- |
+| Process startup, roles, readiness, binary revision | [CLI entry point](cmd/publisher/main.go), [configuration](internal/config), [build metadata](internal/buildinfo) | [Compiled binary smoke](scripts/verify/binary-smoke.py) and [deployment guide](docs/deployment.md) |
+| OAuth, account ownership, refresh, or token protection | [Account manager](internal/account/manager.go), [account routes](internal/api/accounts.go), [security](internal/security) | Browser binding, tenant isolation, refresh interruption, and native session-lock tests |
+| Post admission, scheduling, or reconciliation | [Post routes](internal/api/posts.go), [admission](internal/api/admission.go), [store](internal/store), [migrations](internal/store/migrations) | Same-key replay, changed-payload conflict, cancel/reschedule fence, and [storage contract](docs/database.md) |
+| Delivery, pacing, or a provider request | [Worker](internal/worker/worker.go), adapters for [TikTok](internal/provider/tiktok), [X](internal/provider/x), and [Instagram](internal/provider/instagram) | Provider fixture, recorded checkpoint, other-target independence, and native worker contention tests |
+| Diagnostics, backup, or restore | [Operations manager](internal/ops/manager.go), [operations runbook](docs/operations.md), [restore verifier](docs/verify-restore.sh) | Compiled revision, actual worker progress, restore quarantine, and preserved receipts |
+| SPAWN-specific publishing | [Lifecycle routes](internal/api/lifecycle.go), [lifecycle contract](docs/central-lifecycle.md) | Explicit consent, original receipt and bounded scope; the optional lifecycle path uses separate service authentication |
+
+Migration and runtime database roles have different permissions. Do not change applied migration bytes. The runtime also needs a direct or session-preserving connection path for advisory locks, not transaction-pool mode. A healthy API process is not proof that a worker is dispatching, and a worker’s heartbeat is not the same as a completed worker iteration.
+
+## Verification matrix
+
+| Gate | Run or inspect | What remains unproven |
+| --- | --- | --- |
+| Go behavior and fixtures | `make test`, `make test-race`, `make vet` | Provider fixtures prove request and state behavior, not live permissions or posting. Database tests can skip without a test database. |
+| Native database | `make test-postgres` with a dedicated `TEST_DATABASE_URL` and `TEST_PGLITE` unset; [native gate](scripts/verify/README.md) | Run against the intended connection topology too. A sequential PGlite check cannot demonstrate independent-session locking. |
+| Built artifact | `make build BUILD_REVISION="$(git rev-parse HEAD)"`, then `./bin/publisher version`; see the [compiled smoke gate](.github/workflows/test.yml) | A matching binary revision does not identify the image, migration state, or configuration actually serving users. |
+| Recovery | [Backup, restore, and reconciliation](docs/operations.md#restore-and-publication-reconciliation), then check the selected restore and the same compiled revision | A synthetic database proves tested invariants, not that a real backup can safely serve. |
+| Platform acceptance | With the proper account owner and app access, verify OAuth, approved media/visibility, and provider receipt on each platform being enabled | Approval or success on one destination does not prove another platform, account type, or media format. |
+
+## Recover the original, not a second post
+
+| What you observe | Next action |
+| --- | --- |
+| The create response was lost | Keep the original body, idempotency key, and request digest. Use the [read-only admission receipt](docs/api.md#scheduling-and-idempotency) to recover the original; it cannot create or retry a publish. |
+| A target is processing with a known operation | Keep the provider ID and checkpoint. Poll or resume that operation; do not create a replacement because another target already finished. |
+| A target needs attention and publication may already have happened | Check the provider account and saved target events before [resolving the original](docs/api.md#recovery-without-duplicate-publication). Do not retry a send with an unknown outcome. |
+| Refresh was interrupted or the account requires reauthorization | Have the owner reconnect through browser OAuth. Do not restore an old credential or clear its quarantine by hand. |
+| The database was restored | Keep publication stopped until the [restore procedure](docs/operations.md#restore-and-publication-reconciliation) verifies the known restore point, target quarantine, and evidence. A readiness probe alone is not release authorization. |
+
+The publishing API has no composer, asset upload, or transcoding layer. Keep secrets and provider identifiers out of client logs; treat a provider receipt as evidence for its exact destination, not proof of simultaneous visibility, delivery elsewhere, or broader platform approval.
